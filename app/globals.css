@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+/* ---- Design tokens: "Editorial, studio-of-one" ---- */
+:root {
+  --bone: #e9e7df;
+  --bone-deep: #e1ded4;
+  --ink: #15140f;
+  --ink-soft: #2c2a23;
+  --cobalt: #2b36f0;
+  --stone: #9c988c;
+  --line: rgba(21, 20, 15, 0.14);
+}
+
+@theme inline {
+  --color-bone: var(--bone);
+  --color-bone-deep: var(--bone-deep);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-cobalt: var(--cobalt);
+  --color-stone: var(--stone);
+  --color-line: var(--line);
+
+  --font-display: var(--font-bricolage);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--bone);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--cobalt);
+  color: var(--bone);
+}
+
+/* Film grain overlay — subtle, fixed, never blocks input */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Accessible focus */
+:focus-visible {
+  outline: 2px solid var(--cobalt);
+  outline-offset: 3px;
+}
+
+/* Custom cursor — only on fine pointers */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: none;
+  }
+  a,
+  button {
+    cursor: none;
+  }
+}
+
+/* Infinite marquee */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee var(--marquee-duration, 30s) linear infinite;
+}
+.animate-marquee-rev {
+  animation: marquee var(--marquee-duration, 30s) linear infinite reverse;
+}
+
+/* Animated gradient "image" clipped to the rotating hero word */
+.word-mask {
+  background-image: linear-gradient(
+    100deg,
+    #2b36f0 0%,
+    #6b74ff 30%,
+    #2b36f0 55%,
+    #15140f 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: maskShift 6s ease-in-out infinite;
+}
+@keyframes maskShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Primary CTA: breathing glow + periodic shine sweep */
+@keyframes ctaPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(43, 54, 240, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(43, 54, 240, 0);
+  }
+}
+.cta-glow {
+  animation: ctaPulse 2.6s ease-out infinite;
+}
+.cta-shine {
+  position: absolute;
+  top: 0;
+  left: -160%;
+  height: 100%;
+  width: 55%;
+  transform: skewX(-20deg);
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  animation: ctaShine 4s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes ctaShine {
+  0% {
+    left: -160%;
+  }
+  55%,
+  100% {
+    left: 160%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-marquee,
+  .animate-marquee-rev {
+    animation: none;
+  }
+  body {
+    cursor: auto;
+  }
+}
