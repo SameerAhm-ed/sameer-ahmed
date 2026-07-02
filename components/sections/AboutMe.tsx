@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
 
 const FACTS = [
@@ -17,14 +18,20 @@ export default function AboutMe() {
         {/* Photo placeholder — replace with next/image of your portrait */}
         <Reveal className="md:col-span-5">
           <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-line bg-bone-deep">
+            {/* Monogram sits behind the photo as a graceful fallback */}
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="font-display text-7xl font-semibold text-ink/15">
                 SA
               </span>
             </div>
-            <div className="absolute bottom-4 left-4 font-mono text-[11px] uppercase tracking-widest text-stone">
-              Your photo here
-            </div>
+            <Image
+              src="/sameer.png"
+              alt="Sameer Ahmed"
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 40vw"
+              className="object-cover object-top"
+            />
           </div>
         </Reveal>
 

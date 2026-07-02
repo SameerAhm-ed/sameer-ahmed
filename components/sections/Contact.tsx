@@ -2,14 +2,15 @@ import MagneticButton from "@/components/ui/MagneticButton";
 import RevealText from "@/components/ui/RevealText";
 import Reveal from "@/components/ui/Reveal";
 
-// TODO: replace placeholders with real links before launch.
-const EMAIL = "hello@sameerahmed.com";
-const CALENDLY = "#"; // booking link
+const EMAIL = "sameer03054@gmail.com";
+// No booking tool yet → "Book a call" opens a pre-filled email.
+// Swap CALENDLY for a real scheduling URL (e.g. Calendly) when you have one.
+const CALENDLY = `mailto:${EMAIL}?subject=${encodeURIComponent(
+  "Project inquiry — let's talk"
+)}`;
 const SOCIALS = [
-  { label: "LinkedIn", href: "#" },
-  { label: "GitHub", href: "#" },
-  { label: "Dribbble", href: "#" },
-  { label: "Instagram", href: "#" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/sameerahm-ed/" },
+  { label: "Email", href: `mailto:${EMAIL}` },
 ];
 
 export default function Contact() {
@@ -59,6 +60,8 @@ export default function Contact() {
               <li key={s.label}>
                 <a
                   href={s.href}
+                  target={s.href.startsWith("http") ? "_blank" : undefined}
+                  rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
                   data-cursor="hover"
                   className="font-mono text-xs uppercase tracking-widest text-bone/80 underline-offset-4 hover:text-cobalt hover:underline"
                 >
