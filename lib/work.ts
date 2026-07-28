@@ -91,11 +91,11 @@ export const WORK: CaseStudy[] = [
       },
       {
         heading: "Built for the floor",
-        body: "It installs as a Progressive Web App, because the people who need it are walking the site with a phone, nowhere near a workstation. The service worker caches the app shell only, deliberately. Live telemetry always comes from the network, because a cached energy reading is worse than no reading: it looks current and isn't.",
+        body: "It works like an app on someone's phone, because the people who use it are walking the plant floor, not sitting at a desk. The screen itself can still open on a weak signal, but the actual numbers never come from anything stored on the phone. A reading that looks current but isn't is worse than no reading at all, because someone could act on a number that's already wrong.",
       },
       {
         heading: "The interesting constraint",
-        body: "Two databases with different schemas behind one coherent interface. The temptation is to paper over the difference in the UI and end up with per-site special cases scattered through the components. I normalised at the data layer instead, so the site split stays a configuration detail and the interface doesn't know or care which database a reading came from.",
+        body: "The four sites don't organise their data the same way underneath. The easy shortcut is to handle each site's quirks directly in the screens people see, which then has to be redone for every new site added. Instead, I made that difference disappear before it ever reaches the dashboard, so a fifth site later means changing one setting, not rewriting screens.",
       },
     ],
   },
@@ -119,19 +119,19 @@ export const WORK: CaseStudy[] = [
       },
       {
         heading: "What I built",
-        body: "A retrieval-augmented assistant that answers only from a fixed corpus and shows its working. Every answer carries the document and section it came from, plus the raw retrieved passages in a “show your work” panel, so you can check that retrieval actually happened. Follow-up questions keep conversation context: ask “do you offer stretch denim?” then “what fits is it suited for?” and it resolves the pronoun from history.",
+        body: "An assistant that only answers from a specific set of company documents, and shows exactly where each answer came from. Every reply names the document and section it was pulled from, plus a panel showing the actual passages it read, so anyone can check the answer wasn't made up. It also follows a conversation: ask “do you offer stretch denim?” then “what fits is it suited for?” and it knows “it” means stretch denim.",
       },
       {
         heading: "Refusing to answer is a feature",
-        body: "The anti-hallucination path is the part I care about most. Ask it who the CEO is, something genuinely not in the corpus, and it says it doesn't know and routes you to the sales team instead of assembling a confident guess from adjacent text. A test pins that behaviour, so it stays true.",
+        body: "The part I care about most is what happens when it doesn't know something. Ask it who the CEO is, which genuinely isn't in its documents, and it says so and points you to the sales team, instead of stitching together a plausible-sounding wrong answer from nearby text. That's the behaviour that matters most for a business chatbot, and a test checks it every time, so it can't quietly stop working without anyone noticing.",
       },
       {
         heading: "The eval",
-        body: "There's a fixed evaluation harness that runs live against the API: five in-corpus factual questions checked for the correct answer and the correct cited source, one out-of-corpus question checked for a refusal, and one multi-turn check proving history is actually used. Current result is 7/7. The harness matters more than the score, because it means a regression shows up in a test run and not in front of a customer.",
+        body: "There's a fixed set of test questions that run against the live system every time: five it should answer correctly from its documents, checked against both the answer and the source it cites; one it should refuse, because the answer genuinely isn't in its documents; and one follow-up question that only passes if it remembers what was just asked. It currently gets all seven right. The tests matter more than the score, because a problem shows up automatically instead of a customer finding it first.",
       },
       {
         heading: "It runs on nothing",
-        body: "Entirely local, at zero API cost: MiniLM embeddings via ONNX on CPU, Chroma for the vector store, and Llama 3.2 3B through Ollama for generation. That constraint does real work. A 3B model needs a tighter prompt and better retrieval than a frontier model would, so the retrieval quality has to carry more of the weight.",
+        body: "It runs entirely on ordinary hardware, with no paid AI service involved and no ongoing bill. That's a real limitation, not a flex: the free, local language model is far smaller than something like GPT-4, so it can't paper over a weak search step with general knowledge the way a bigger model could. Which means finding the right passage has to do more of the work, and getting that right took more effort than it would have with a bigger, paid model doing some of the thinking instead.",
       },
     ],
   },
@@ -148,19 +148,19 @@ export const WORK: CaseStudy[] = [
     sections: [
       {
         heading: "The problem",
-        body: "The gap between a RAG notebook and something a team can actually use is mostly unglamorous: ingestion, storage, deployment, and being able to check where an answer came from. Notebooks skip all four.",
+        body: "A lot of AI document-search demos exist as a script on someone's laptop. Turning that into something a team can actually use means solving the unglamorous problems the demo skips: getting documents into the system reliably, storing them somewhere durable, deploying it so other people can reach it, and being able to check where an answer actually came from.",
       },
       {
         heading: "What I built",
-        body: "A self-hostable document QA service. You upload documents; it splits, embeds and stores them in Postgres with pgvector. When you ask a question it retrieves the relevant passages and answers from them, with citations back to the source so every claim is checkable.",
+        body: "A document question-answering service you can run on your own servers. Upload documents, and it breaks them into pieces and stores them in a searchable form inside a regular Postgres database. Ask a question and it finds the relevant passages and answers from them, with a citation back to the source, so every claim can be checked against the original document.",
       },
       {
         heading: "Boring infrastructure on purpose",
-        body: "Postgres with pgvector, no dedicated vector database. Most teams already run Postgres, already know how to back it up, and already have opinions about how to operate it. Adding a second stateful service to a stack buys a marginal retrieval improvement in exchange for a permanent operational cost, and that trade rarely pays.",
+        body: "I used the same ordinary database, Postgres, to also handle the document search, instead of adding a second, specialised database just for that. Most teams already run Postgres and already know how to keep it backed up and running. A dedicated search database buys a small improvement in result quality, but somebody then has to keep that second system alive, monitored and backed up forever. For most teams, that ongoing cost isn't worth what it buys.",
       },
       {
         heading: "One command to run it",
-        body: "The whole stack (Next.js frontend, FastAPI backend, Postgres) comes up with a single `docker compose up`, and CI runs on every push. The measure of this project is that someone else can clone it and have it working in a minute without asking me anything.",
+        body: "The whole system, front end, back end and database, starts up with one command, and an automated check runs every time new code is pushed, so a mistake gets caught immediately instead of days later. The real measure of this project is that someone else can download it and have it running in a minute without asking me anything.",
       },
     ],
   },
