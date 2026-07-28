@@ -1,8 +1,22 @@
 import CountUp from "@/components/ui/CountUp";
 import Reveal from "@/components/ui/Reveal";
 
-// CONFIRM THESE. Every number here must survive being asked "which ones?"
-// in an interview. An inflated stat costs more credibility than a small one gains.
+// Every number here has to survive being asked "which ones?" in an interview,
+// so the six are named below. Counted from the non-fork repos on
+// github.com/SameerAhm-ed, excluding tutorials, hackathon exercises and
+// learning repos:
+//
+//   1. Artistic Milliners EMS      auth-app                    deployment down
+//   2. Grounded Support Assistant  artistic-milliners-rag-bot  source only
+//   3. SamDocs                     samdocs                     source only
+//   4. Aurum                       gold-analytics              source only
+//   5. Sameer Associates           sameer_associates           live, verified
+//   6. Management System           management-system           live, verified
+//
+// Only two of the six currently answer on a URL. The others are defensible in
+// an interview from the code, but "shipped" is easiest to defend when someone
+// can click it — redeploying EMS would do the most for this number.
+// This portfolio is deliberately not counted.
 const STATS = [
   { value: 2, suffix: "+", label: "Years shipping production software" },
   { value: 6, suffix: "", label: "Products shipped end to end" },
