@@ -15,9 +15,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const study = bySlug(slug);
   if (!study) return {};
+  // Without its own url/canonical, each case study inherits the root
+  // OpenGraph block and advertises the home page instead of itself — so a
+  // shared case-study link previews as "/". Relative paths resolve against
+  // metadataBase in app/layout.tsx.
+  const path = `/work/${study.slug}`;
   return {
     title: `${study.name} — Sameer Ahmed`,
     description: study.kind,
+    alternates: { canonical: path },
+    openGraph: {
+      title: `${study.name} — Sameer Ahmed`,
+      description: study.kind,
+      url: path,
+      type: "article",
+    },
   };
 }
 

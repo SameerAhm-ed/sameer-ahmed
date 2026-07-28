@@ -27,9 +27,11 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-const SITE = "https://sameerahmed.dev"; // TODO: swap for the real domain
+// Live deployment. Swap this one constant if a custom domain lands later —
+// metadataBase, the OpenGraph url and the JSON-LD all read from it.
+const SITE = "https://sameer-ahmed.vercel.app";
 const DESCRIPTION =
-  "Full-stack engineer building AI-powered products end to end — architecture, build, and ship. Two years, shipped to production.";
+  "Full-stack engineer building AI-powered products end to end: architecture, build, ship. Two years of shipping to production.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),

@@ -7,7 +7,7 @@ import Reveal from "@/components/ui/Reveal";
 const FAQS = [
   {
     q: "How do we get started?",
-    a: "Book a quick call or send a message. We'll talk through your goals, scope, and timeline — then I'll send a clear proposal with fixed pricing.",
+    a: "Book a quick call or send a message. We'll talk through your goals, scope, and timeline, then I'll send a proposal with fixed pricing.",
   },
   {
     q: "What are your typical timelines?",
@@ -15,7 +15,7 @@ const FAQS = [
   },
   {
     q: "Can you build AI features?",
-    a: "Yes — LLM apps, chatbots, agents, and RAG over your own data, integrated with models like Claude or GPT. I build them production-ready, not just demos.",
+    a: "Yes. LLM apps, chatbots, agents, and RAG over your own data, integrated with models like Claude or GPT. They ship with evals, so you can see when one breaks.",
   },
   {
     q: "How does pricing work?",
@@ -23,11 +23,11 @@ const FAQS = [
   },
   {
     q: "What do you need from me?",
-    a: "Your goals, access to anything relevant, and timely feedback at the review points. I handle the rest — architecture, build, and launch.",
+    a: "Your goals, access to anything relevant, and timely feedback at the review points. I handle architecture, build, and launch.",
   },
   {
     q: "Do you offer revisions and support?",
-    a: "Yes. Every project includes review rounds, and I stick around after launch to make sure everything runs smoothly.",
+    a: "Yes. Every project includes review rounds, and I stay available after launch for the bugs that only show up once real people are using it.",
   },
 ];
 

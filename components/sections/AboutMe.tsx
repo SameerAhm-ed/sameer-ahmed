@@ -28,21 +28,21 @@ export default function AboutMe() {
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="font-display text-3xl font-semibold leading-tight tracking-tight text-ink md:text-5xl">
-              Hi, I&apos;m Sameer — I build the whole product, not just the
-              pretty part.
+              Hi, I&apos;m Sameer. I build whole products, database up to
+              interface.
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <div className="mt-8 space-y-5 text-base leading-relaxed text-ink-soft md:text-lg">
               <p>
                 I&apos;m a full-stack engineer. Two years of turning ideas into
-                products people actually use — front-end, back-end,
-                infrastructure, and the AI that makes them smart.
+                products people actually use: front-end, back-end,
+                infrastructure, and the AI parts.
               </p>
               <p>
                 Two years is not a long time. It is long enough to have shipped
                 real things, broken them in production, and learned what that
-                costs — which is mostly what I&apos;d want to know about someone
+                costs. Which is mostly what I&apos;d want to know about someone
                 I was hiring.
               </p>
             </div>

@@ -4,22 +4,22 @@ const STEPS = [
   {
     n: "01",
     title: "Discover",
-    body: "We talk goals, audience, and what success looks like. I dig into your brand so the work is built on substance, not guesswork.",
+    body: "We talk goals, audience, and what success looks like. I dig into your brand first, so the decisions later have something to stand on.",
   },
   {
     n: "02",
     title: "Design",
-    body: "I shape the direction — layout, type, motion — and share work early and often so you're never surprised by the result.",
+    body: "I shape the direction, layout, type and motion, and share it while it's still cheap to change.",
   },
   {
     n: "03",
     title: "Build",
-    body: "Full-stack engineering — front-end, APIs, data, and any AI wired in. Pixel-faithful, tested, and built to scale.",
+    body: "Full-stack engineering: front-end, APIs, data, and any AI wired in. Faithful to the design, tested, and ready for real traffic.",
   },
   {
     n: "04",
     title: "Ship & Scale",
-    body: "We deploy to production, set up monitoring, and make it fast and reliable. I stay on to help it grow after go-live.",
+    body: "We deploy to production and set up monitoring, so you find out about problems before your users report them. I stay on after go-live.",
   },
 ];
 

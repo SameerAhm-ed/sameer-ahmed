@@ -167,9 +167,9 @@ export default function Hero() {
           transition={instant}
           className="max-w-md text-base leading-relaxed text-ink-soft md:text-lg"
         >
-          Sameer Ahmed — a full-stack engineer building modern, AI-powered
-          products end to end. From first idea to production, for teams who need
-          it shipped right.
+          Sameer Ahmed, full-stack engineer. I build AI-powered products end to
+          end, from first idea to production, for teams who need it shipped
+          right.
         </motion.p>
         <motion.div
           data-reveal

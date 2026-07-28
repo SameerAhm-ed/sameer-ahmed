@@ -3,12 +3,12 @@ import Reveal from "@/components/ui/Reveal";
 const SERVICES = [
   {
     title: "AI Products & Agents",
-    body: "LLM apps, chatbots, and agents — RAG over your own data, automations, and Claude/GPT integrations that actually ship.",
+    body: "LLM apps, chatbots, and agents. RAG over your own data, automations, and Claude/GPT integrations that actually ship.",
     tags: ["LLMs", "RAG", "Agents"],
   },
   {
     title: "Full-Stack Web Apps",
-    body: "End-to-end products in Next.js & Node — APIs, databases, auth, payments. Built to scale, not just demo.",
+    body: "End-to-end products in Next.js & Node: APIs, databases, auth, payments. Built to survive real traffic.",
     tags: ["Next.js", "APIs", "Databases"],
   },
   {
@@ -18,7 +18,7 @@ const SERVICES = [
   },
   {
     title: "Product Design & UX",
-    body: "The polish that builds trust — interfaces and brand details that make the product feel genuinely premium.",
+    body: "Interfaces and brand details people trust on sight. Type, spacing, states, and the small things that read as care.",
     tags: ["UI/UX", "Design Systems", "Brand"],
   },
 ];
