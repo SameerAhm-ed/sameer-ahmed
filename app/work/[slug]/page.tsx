@@ -159,6 +159,18 @@ export default async function WorkDetail({ params }: Props) {
               <p className="mt-4 text-base leading-relaxed text-ink-soft md:text-lg">
                 {s.body}
               </p>
+              {s.image && (
+                <figure className="mt-6 overflow-hidden rounded-xl border border-line bg-bone-deep">
+                  <Image
+                    src={s.image}
+                    alt={s.imageAlt ?? ""}
+                    width={1200}
+                    height={750}
+                    sizes="(max-width: 768px) 100vw, 620px"
+                    className="h-auto w-full object-cover"
+                  />
+                </figure>
+              )}
             </section>
           </Reveal>
         ))}

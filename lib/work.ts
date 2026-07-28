@@ -27,7 +27,13 @@ export type CaseStudy = {
   /** Live deployment, if there is one. */
   href?: string;
   repo?: string;
-  sections: { heading: string; body: string }[];
+  sections: {
+    heading: string;
+    body: string;
+    /** Optional screenshot backing this specific claim, not just the project overview. */
+    image?: string;
+    imageAlt?: string;
+  }[];
 };
 
 export const WORK: CaseStudy[] = [
@@ -56,14 +62,23 @@ export const WORK: CaseStudy[] = [
       {
         heading: "Every rupee has to add up",
         body: "Computers do decimal math with tiny rounding errors that are usually invisible. Stack a discount and a tax rate on an invoice and a customer could be charged a fraction of a paisa off from what the receipt says. That sounds too small to matter, but it happens on every invoice, and in a running ledger those fractions never cancel out, they accumulate. Enough of them and the books stop matching the bank statement, and someone has to go hunting for the difference by hand. I built the money handling so the system never approximates: every amount is calculated in whole paisa, so a rupee is a rupee, on every invoice, forever.",
+        image: "/work/aiza-heels-erp-invoice.webp",
+        imageAlt:
+          "A sales invoice with a per-line discount and tax applied, showing the totals the system calculates.",
       },
       {
         heading: "No two invoices can share a number",
         body: "If two people create an invoice at nearly the same moment, a careless system can hand out the same number to both. It looks like a small glitch, and it stays invisible for months, until a tax audit turns up two invoices with the same number and now every record has to be checked by hand. I built the numbering so the database itself guarantees each invoice gets a number nobody else can claim, rather than relying on two people never clicking at exactly the same second.",
+        image: "/work/aiza-heels-erp-sales-list.webp",
+        imageAlt:
+          "A list of sales invoices, each with its own sequential INV-YYYY-NNNN number.",
       },
       {
         heading: "Built for how the business actually works",
         body: "Ledger statements render as paper, because a wholesale customer settling an account expects a printed statement in their hand. Reports export to CSV, because the accountant works in Excel and always will. The whole thing runs from a single SQLite file with no external services, so for a one-operator business there is no monthly cloud bill and nothing that has to stay reachable for the system to keep working.",
+        image: "/work/aiza-heels-erp-ledger-statement.webp",
+        imageAlt:
+          "A customer's account statement in a print-ready, paper-style layout.",
       },
     ],
   },
