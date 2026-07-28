@@ -1,42 +1,27 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import Reveal from "@/components/ui/Reveal";
-
-// Placeholder catalogue — replace each entry with a real case study + image later.
-const WORK = [
-  {
-    index: "01",
-    name: "Case study",
-    kind: "AI Platform",
-    year: "Soon",
-    grad: "linear-gradient(135deg, #2b36f0, #6b74ff)",
-  },
-  {
-    index: "02",
-    name: "Case study",
-    kind: "Full-Stack App",
-    year: "Soon",
-    grad: "linear-gradient(135deg, #15140f, #2b36f0)",
-  },
-  {
-    index: "03",
-    name: "Case study",
-    kind: "Cloud Product",
-    year: "Soon",
-    grad: "linear-gradient(135deg, #6b74ff, #e9e7df)",
-  },
-];
+import { WORK } from "@/lib/work";
 
 export default function Work() {
   const [active, setActive] = useState<number | null>(null);
   const preview = useRef<HTMLDivElement>(null);
   const pos = useRef({ x: 0, y: 0, cx: 0, cy: 0 });
 
-  // Cursor-follow preview (fine pointers only).
+  // Cursor-follow preview (fine pointers only). The rAF loop and the mousemove
+  // listener only exist while a row is actually hovered — previously both ran
+  // for the lifetime of the page, at 60fps, showing nothing.
   useEffect(() => {
+    if (active === null) return;
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     if (!fine) return;
+
+    // Start where the pointer already is, so the panel eases out from under the
+    // cursor rather than flying in from wherever it was left last time.
+    pos.current.cx = pos.current.x;
+    pos.current.cy = pos.current.y;
 
     const onMove = (e: MouseEvent) => {
       pos.current.x = e.clientX;
@@ -58,13 +43,15 @@ export default function Work() {
       window.removeEventListener("mousemove", onMove);
       cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [active]);
 
+  // Deliberately the roomiest section on the page — it's the one that matters
+  // most, and density is how a page signals that.
   return (
-    <section id="work" className="border-t border-line px-6 py-24 md:px-10 md:py-32">
+    <section id="work" className="border-t border-line px-6 py-32 md:px-10 md:py-48">
       <div className="mx-auto max-w-6xl">
         <Reveal className="mb-12 flex items-end justify-between gap-6">
-          <h2 className="font-display text-4xl font-semibold tracking-tight text-ink md:text-6xl">
+          <h2 className="font-display text-5xl font-semibold tracking-tight text-ink md:text-8xl">
             Selected work
           </h2>
           <p className="font-mono text-xs uppercase tracking-widest text-stone">
@@ -74,40 +61,47 @@ export default function Work() {
 
         <ul onMouseLeave={() => setActive(null)}>
           {WORK.map((w, i) => (
-            <Reveal key={w.index} delay={i * 0.06}>
-              <li
-                data-cursor="hover"
-                onMouseEnter={() => setActive(i)}
-                className="group grid grid-cols-12 items-center gap-4 border-t border-line py-7 transition-colors last:border-b hover:bg-bone-deep md:py-9"
-              >
-                <span className="col-span-2 font-mono text-xs text-stone md:text-sm">
-                  {w.index}
-                </span>
-                <span className="col-span-6 font-display text-2xl font-medium text-ink transition-transform duration-300 group-hover:translate-x-2 md:col-span-5 md:text-4xl">
-                  {w.name}
-                </span>
-                <span className="col-span-4 text-sm text-ink-soft md:col-span-3">
-                  {w.kind}
-                </span>
-                <span className="col-span-12 mt-2 font-mono text-xs uppercase tracking-widest text-cobalt md:col-span-2 md:mt-0 md:text-right">
-                  {w.year}
-                </span>
+            <Reveal key={w.slug} delay={i * 0.06}>
+              <li className="border-t border-line last:border-b">
+                <Link
+                  href={`/work/${w.slug}`}
+                  data-cursor="hover"
+                  onMouseEnter={(e) => {
+                    pos.current.x = e.clientX;
+                    pos.current.y = e.clientY;
+                    setActive(i);
+                  }}
+                  className="group grid grid-cols-12 items-center gap-4 py-7 transition-colors hover:bg-bone-deep md:py-9"
+                >
+                  <span className="col-span-2 font-mono text-xs text-stone md:text-sm">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="col-span-6 font-display text-2xl font-medium text-ink transition-transform duration-300 group-hover:translate-x-2 md:col-span-5 md:text-4xl">
+                    {w.name}
+                  </span>
+                  <span className="col-span-4 text-sm text-ink-soft md:col-span-3">
+                    {w.kind}
+                  </span>
+                  <span className="col-span-12 mt-2 font-mono text-xs uppercase tracking-widest text-cobalt md:col-span-2 md:mt-0 md:text-right">
+                    {w.year}
+                  </span>
+                </Link>
               </li>
             </Reveal>
           ))}
         </ul>
 
-        <Reveal className="mt-8">
-          <p className="text-sm text-ink-soft">
-            Real case studies are on the way. Want a closer look at past work in
-            the meantime?{" "}
+        <Reveal className="mt-10">
+          <p className="max-w-lg text-base text-ink-soft">
+            Every one of these is source-available — read the code, or{" "}
             <a
               href="#contact"
               data-cursor="hover"
               className="text-ink underline underline-offset-4 hover:text-cobalt"
             >
-              Just ask.
+              ask me to walk you through one
             </a>
+            .
           </p>
         </Reveal>
       </div>
@@ -124,12 +118,12 @@ export default function Work() {
       >
         {WORK.map((w, i) => (
           <div
-            key={w.index}
+            key={w.slug}
             className="absolute inset-0 flex items-end p-5 transition-opacity duration-200"
             style={{ background: w.grad, opacity: active === i ? 1 : 0 }}
           >
             <span className="font-display text-lg font-medium text-bone mix-blend-difference">
-              {w.kind}
+              {w.name}
             </span>
           </div>
         ))}

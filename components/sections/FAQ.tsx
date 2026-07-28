@@ -34,15 +34,28 @@ const FAQS = [
 export default function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
+  // Tight on purpose: reference material, not a headline moment.
   return (
-    <section id="faq" className="border-t border-line px-6 py-24 md:px-10 md:py-32">
+    <section id="faq" className="border-t border-line px-6 py-16 md:px-10 md:py-24">
       <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-12 md:gap-16">
         <Reveal className="md:col-span-4">
+          <p className="mb-6 font-mono text-xs uppercase tracking-widest text-cobalt">
+            (For project work)
+          </p>
           <h2 className="font-display text-4xl font-semibold tracking-tight text-ink md:text-6xl">
             Questions, answered
           </h2>
           <p className="mt-5 max-w-xs text-sm text-ink-soft">
-            Everything you might want to know before reaching out.
+            Scope, timelines and pricing for freelance projects. Hiring for a
+            role instead?{" "}
+            <a
+              href="#aboutme"
+              data-cursor="hover"
+              className="text-ink underline underline-offset-4 hover:text-cobalt"
+            >
+              Start here
+            </a>
+            .
           </p>
         </Reveal>
 

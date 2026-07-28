@@ -13,6 +13,8 @@ precision mediump float;
 uniform float u_time;
 uniform vec2 u_res;
 uniform vec2 u_mouse;
+uniform vec3 u_base;
+uniform vec3 u_accent;
 
 float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float noise(vec2 p){
@@ -22,9 +24,11 @@ float noise(vec2 p){
   float c = hash(i + vec2(0.0, 1.0)), d = hash(i + vec2(1.0, 1.0));
   return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
 }
+// 3 octaves, not 5. The last two contribute detail that the blur and the 0.6
+// alpha throw away anyway, and they cost two full noise() calls per pixel.
 float fbm(vec2 p){
   float v = 0.0, a = 0.5;
-  for (int i = 0; i < 5; i++) { v += a * noise(p); p *= 2.0; a *= 0.5; }
+  for (int i = 0; i < 3; i++) { v += a * noise(p); p *= 2.0; a *= 0.5; }
   return v;
 }
 void main(){
@@ -32,8 +36,8 @@ void main(){
   vec2 p = uv * 3.0;
   float t = u_time * 0.06;
   float n = fbm(p + vec2(t, -t * 0.5) + fbm(p + t));
-  vec3 bone = vec3(0.913, 0.905, 0.874);
-  vec3 cobalt = vec3(0.169, 0.212, 0.941);
+  vec3 bone = u_base;
+  vec3 cobalt = u_accent;
   vec3 col = mix(bone, cobalt, smoothstep(0.35, 0.9, n));
   float fade = smoothstep(0.05, 0.75, uv.x);      // keep left (text) calm
   float alpha = fade * 0.6 * smoothstep(0.2, 0.95, n);
@@ -100,8 +104,41 @@ export default function HeroShader() {
     const uTime = gl.getUniformLocation(prog, "u_time");
     const uRes = gl.getUniformLocation(prog, "u_res");
     const uMouse = gl.getUniformLocation(prog, "u_mouse");
+    const uBase = gl.getUniformLocation(prog, "u_base");
+    const uAccent = gl.getUniformLocation(prog, "u_accent");
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    // Pull the surface + accent straight from the CSS tokens so the aurora
+    // follows the theme instead of baking in the light palette.
+    const rgb = (v: string): [number, number, number] => {
+      const h = v.trim().replace("#", "");
+      const n = parseInt(
+        h.length === 3
+          ? h
+              .split("")
+              .map((c) => c + c)
+              .join("")
+          : h,
+        16
+      );
+      return [
+        ((n >> 16) & 255) / 255,
+        ((n >> 8) & 255) / 255,
+        (n & 255) / 255,
+      ];
+    };
+    const syncTheme = () => {
+      const cs = getComputedStyle(document.documentElement);
+      gl.uniform3fv(uBase, rgb(cs.getPropertyValue("--bone")));
+      gl.uniform3fv(uAccent, rgb(cs.getPropertyValue("--cobalt")));
+    };
+    syncTheme();
+    const themeObserver = new MutationObserver(syncTheme);
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
 
     // Smoothed pointer (normalized, y-flipped to match gl_FragCoord).
     let tx = 0.72;
@@ -114,7 +151,9 @@ export default function HeroShader() {
     };
     window.addEventListener("mousemove", onMouse);
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    // Capped at 1: this is an out-of-focus gradient, so rendering it at retina
+    // density buys nothing visible and roughly doubles the fragment cost.
+    const dpr = Math.min(window.devicePixelRatio || 1, 1);
     const resize = () => {
       cv.width = cv.clientWidth * dpr;
       cv.height = cv.clientHeight * dpr;
@@ -136,8 +175,10 @@ export default function HeroShader() {
     };
     // pause when tab hidden to save battery
     const onVis = () => {
-      if (document.hidden) cancelAnimationFrame(raf);
-      else raf = requestAnimationFrame(loop);
+      // Always cancel first — otherwise a repeated "visible" event stacks a
+      // second rAF loop on top of the running one.
+      cancelAnimationFrame(raf);
+      if (!document.hidden) raf = requestAnimationFrame(loop);
     };
     document.addEventListener("visibilitychange", onVis);
     raf = requestAnimationFrame(loop);
@@ -147,6 +188,7 @@ export default function HeroShader() {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouse);
       document.removeEventListener("visibilitychange", onVis);
+      themeObserver.disconnect();
     };
   }, [enabled]);
 

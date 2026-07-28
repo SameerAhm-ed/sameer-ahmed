@@ -11,6 +11,10 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function Preloader() {
   const [count, setCount] = useState(0);
   const [show, setShow] = useState(true);
+  // When we're skipping the intro we unmount outright rather than letting
+  // AnimatePresence play an exit. Under reduced motion the exit transform never
+  // runs, so the panel would sit on top of the page forever.
+  const [skip, setSkip] = useState(false);
 
   const finish = () => {
     (window as typeof window & { __introDone?: boolean }).__introDone = true;
@@ -22,11 +26,17 @@ export default function Preloader() {
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    if (reduce) {
+    // Show the intro once per session. Making a returning visitor sit through
+    // it again is a tax, not a delight.
+    const seen = sessionStorage.getItem("intro:seen");
+
+    if (reduce || seen) {
+      setSkip(true);
       setShow(false);
       finish();
       return;
     }
+    sessionStorage.setItem("intro:seen", "1");
 
     // lock scroll during intro
     document.body.style.overflow = "hidden";
@@ -54,14 +64,26 @@ export default function Preloader() {
     };
   }, []);
 
+  // Bail out above AnimatePresence, not inside it: removing the child while
+  // AnimatePresence is mounted starts an exit animation, and under reduced
+  // motion that animation never runs — leaving the panel on screen for good.
+  if (skip) return null;
+
   return (
-    <AnimatePresence
-      onExitComplete={() => {
-        document.body.style.overflow = "";
-      }}
-    >
+    <>
+      {/* The overlay ships in the SSR HTML, so without JS it would cover the
+          page forever. Hide it when scripting is unavailable. */}
+      <noscript>
+        <style>{`[data-preloader]{display:none !important}`}</style>
+      </noscript>
+      <AnimatePresence
+        onExitComplete={() => {
+          document.body.style.overflow = "";
+        }}
+      >
       {show && (
         <motion.div
+          data-preloader
           className="fixed inset-0 z-[100] flex flex-col justify-between bg-ink px-6 py-6 text-bone md:px-10 md:py-8"
           exit={{ y: "-100%" }}
           transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
@@ -91,6 +113,7 @@ export default function Preloader() {
           </div>
         </motion.div>
       )}
-    </AnimatePresence>
+      </AnimatePresence>
+    </>
   );
 }

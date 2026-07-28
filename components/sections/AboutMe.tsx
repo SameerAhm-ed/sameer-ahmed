@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
+import Portrait from "@/components/ui/Portrait";
 
 const FACTS = [
   { k: "Based in", v: "Pakistan · GMT+5" },
   { k: "Focus", v: "Full-stack + AI" },
-  { k: "Experience", v: "8+ years" },
+  { k: "Experience", v: "2+ years" },
   { k: "Availability", v: "Open for projects" },
 ];
 
@@ -15,24 +15,8 @@ export default function AboutMe() {
       className="border-t border-line px-6 py-24 md:px-10 md:py-32"
     >
       <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-12 md:gap-16">
-        {/* Photo placeholder — replace with next/image of your portrait */}
         <Reveal className="md:col-span-5">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-line bg-bone-deep">
-            {/* Monogram sits behind the photo as a graceful fallback */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-display text-7xl font-semibold text-ink/15">
-                SA
-              </span>
-            </div>
-            <Image
-              src="/sameer.png"
-              alt="Sameer Ahmed"
-              fill
-              priority
-              sizes="(max-width: 768px) 100vw, 40vw"
-              className="object-cover object-top"
-            />
-          </div>
+          <Portrait />
         </Reveal>
 
         {/* Story */}
@@ -51,15 +35,15 @@ export default function AboutMe() {
           <Reveal delay={0.1}>
             <div className="mt-8 space-y-5 text-base leading-relaxed text-ink-soft md:text-lg">
               <p>
-                I&apos;m a full-stack engineer who&apos;s spent years turning
-                ideas into products people rely on — front-end, back-end,
-                infrastructure, and increasingly the AI that makes them smart.
+                I&apos;m a full-stack engineer. Two years of turning ideas into
+                products people actually use — front-end, back-end,
+                infrastructure, and the AI that makes them smart.
               </p>
               <p>
-                I work end to end: I architect it, build it, and ship it to
-                production — so you get one person accountable for the whole
-                thing, and a result that&apos;s cohesive from first idea to
-                launch day.
+                Two years is not a long time. It is long enough to have shipped
+                real things, broken them in production, and learned what that
+                costs — which is mostly what I&apos;d want to know about someone
+                I was hiring.
               </p>
             </div>
           </Reveal>

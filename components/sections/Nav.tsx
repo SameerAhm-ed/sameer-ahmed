@@ -1,6 +1,7 @@
 "use client";
 
 import LiveClock from "@/components/ui/LiveClock";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export default function Nav() {
   return (
@@ -18,13 +19,19 @@ export default function Nav() {
           <span className="text-stone">/</span>
           <LiveClock />
         </span>
-        <a
-          href="#contact"
-          data-cursor="hover"
-          className="font-mono text-xs uppercase tracking-widest underline-offset-4 hover:underline"
-        >
-          Get in touch
-        </a>
+        <span className="flex items-center gap-5">
+          <kbd className="hidden rounded border border-current/30 px-2 py-1 font-mono text-[10px] uppercase tracking-widest opacity-70 lg:block">
+            ⌘K
+          </kbd>
+          <ThemeToggle />
+          <a
+            href="#contact"
+            data-cursor="hover"
+            className="font-mono text-xs uppercase tracking-widest underline-offset-4 hover:underline"
+          >
+            Get in touch
+          </a>
+        </span>
       </nav>
     </header>
   );

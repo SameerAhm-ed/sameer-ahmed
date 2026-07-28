@@ -1,14 +1,32 @@
 @import "tailwindcss";
 
-/* ---- Design tokens: "Editorial, studio-of-one" ---- */
+/* ---- Design tokens: "Editorial, studio-of-one" ----
+   `bone` is always the page surface and `ink` is always the ink on it. Dark
+   mode swaps what those two point to rather than introducing a parallel set
+   of classes — so the inverted panels (Process, Contact, the marquee) keep
+   their contrast relationship automatically. */
 :root {
   --bone: #e9e7df;
   --bone-deep: #e1ded4;
   --ink: #15140f;
   --ink-soft: #2c2a23;
   --cobalt: #2b36f0;
-  --stone: #9c988c;
+  --stone: #686355; /* 4.84:1 on --bone — was #9c988c at 2.1:1, failed WCAG AA */
   --line: rgba(21, 20, 15, 0.14);
+  --grain: 0.045;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bone: #12110d;
+  --bone-deep: #1b1a15;
+  --ink: #ece9e0;
+  --ink-soft: #b5b0a2;
+  --cobalt: #6b74ff; /* lifted for contrast on the dark surface */
+  --stone: #8d887a; /* 5.2:1 on the dark surface */
+  --line: rgba(236, 233, 224, 0.16);
+  --grain: 0.03;
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -27,6 +45,14 @@
 
 * {
   border-color: var(--line);
+}
+
+/* Theme toggle glyph: driven by the attribute so the button needs no state. */
+[data-theme-icon]::after {
+  content: "☀";
+}
+:root[data-theme="dark"] [data-theme-icon]::after {
+  content: "☾";
 }
 
 html {
@@ -53,7 +79,7 @@ body::after {
   inset: 0;
   z-index: 60;
   pointer-events: none;
-  opacity: 0.045;
+  opacity: var(--grain);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -63,15 +89,67 @@ body::after {
   outline-offset: 3px;
 }
 
-/* Custom cursor — only on fine pointers */
+/* Skip link: off-screen until it takes focus, then first thing on the page. */
+.skip-link {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 200;
+  transform: translate(-50%, -120%);
+  background: var(--ink);
+  color: var(--bone);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0 0 0.75rem 0.75rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: transform 0.2s ease;
+}
+.skip-link:focus {
+  transform: translate(-50%, 0);
+}
+
+/* The portrait cut-out has no panel behind it, so on a dark background his dark
+   shirt merges into the page. A light rim replaces the drop shadow, which is
+   invisible down there. */
+[data-theme="dark"] .portrait-fig {
+  filter: drop-shadow(0 0 70px rgba(240, 238, 230, 0.1))
+    drop-shadow(0 2px 3px rgba(240, 238, 230, 0.16));
+}
+
+/* Custom cursor — only once <Cursor> has actually mounted and set the class.
+   Gating on the class means a JS failure leaves the native cursor intact
+   instead of leaving the user with no pointer at all. */
 @media (hover: hover) and (pointer: fine) {
-  body {
+  body.has-custom-cursor,
+  body.has-custom-cursor a,
+  body.has-custom-cursor button {
     cursor: none;
   }
-  a,
-  button {
-    cursor: none;
-  }
+}
+
+
+/* Konami easter egg — see components/EasterEgg.tsx */
+.blueprint * {
+  outline: 1px solid color-mix(in srgb, var(--cobalt) 45%, transparent) !important;
+}
+.blueprint body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 59;
+  pointer-events: none;
+  background-image: linear-gradient(
+      color-mix(in srgb, var(--cobalt) 12%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--cobalt) 12%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 40px 40px;
 }
 
 /* Infinite marquee */
@@ -94,10 +172,10 @@ body::after {
 .word-mask {
   background-image: linear-gradient(
     100deg,
-    #2b36f0 0%,
-    #6b74ff 30%,
-    #2b36f0 55%,
-    #15140f 100%
+    var(--cobalt) 0%,
+    color-mix(in srgb, var(--cobalt) 65%, var(--ink)) 30%,
+    var(--cobalt) 55%,
+    var(--ink) 100%
   );
   background-size: 220% 100%;
   -webkit-background-clip: text;
@@ -112,45 +190,6 @@ body::after {
   }
   50% {
     background-position: 100% 50%;
-  }
-}
-
-/* Primary CTA: breathing glow + periodic shine sweep */
-@keyframes ctaPulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(43, 54, 240, 0.5);
-  }
-  50% {
-    box-shadow: 0 0 0 12px rgba(43, 54, 240, 0);
-  }
-}
-.cta-glow {
-  animation: ctaPulse 2.6s ease-out infinite;
-}
-.cta-shine {
-  position: absolute;
-  top: 0;
-  left: -160%;
-  height: 100%;
-  width: 55%;
-  transform: skewX(-20deg);
-  background: linear-gradient(
-    100deg,
-    transparent,
-    rgba(255, 255, 255, 0.35),
-    transparent
-  );
-  animation: ctaShine 4s ease-in-out infinite;
-  pointer-events: none;
-}
-@keyframes ctaShine {
-  0% {
-    left: -160%;
-  }
-  55%,
-  100% {
-    left: 160%;
   }
 }
 
@@ -169,5 +208,19 @@ body::after {
   }
   body {
     cursor: auto;
+  }
+
+  /* Content that is hidden purely so it can animate in must never depend on
+     that animation actually running. This overrides the inline styles the
+     motion library writes, so a reveal can never strand text off-screen or at
+     zero opacity for someone who asked for less motion. */
+  [data-reveal] {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Scroll-linked parallax is pure decoration — hold it still. */
+  [data-parallax] {
+    transform: none !important;
   }
 }

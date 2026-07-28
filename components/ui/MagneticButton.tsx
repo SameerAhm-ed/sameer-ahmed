@@ -43,9 +43,8 @@ export default function MagneticButton({
       onMouseLeave={reset}
       style={{ x: sx, y: sy }}
       data-cursor="hover"
-      className={`cta-glow group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-ink px-9 py-4 font-mono text-sm uppercase tracking-widest text-bone transition-colors hover:bg-cobalt ${className}`}
+      className={`group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-ink px-9 py-4 font-mono text-sm uppercase tracking-widest text-bone transition-colors hover:bg-cobalt ${className}`}
     >
-      <span className="cta-shine" aria-hidden />
       <span className="relative z-10 inline-flex items-center gap-3">
         {children}
       </span>

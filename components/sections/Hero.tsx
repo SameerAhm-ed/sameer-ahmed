@@ -1,76 +1,75 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { motion } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  type Variants,
+} from "framer-motion";
 import MagneticButton from "@/components/ui/MagneticButton";
 import HeroShader from "@/components/ui/HeroShader";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const ROTATING = ["win customers", "scale", "ship fast", "convert"];
+
+const lines: Variants = {
+  hidden: { y: "120%" },
+  show: (i: number) => ({
+    y: "0%",
+    transition: { duration: 1, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] },
+  }),
+};
+
+const fade: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, delay: 0.5 + i * 0.12, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
-  const blob = useRef<HTMLDivElement>(null);
   const [word, setWord] = useState(0);
+  const [started, setStarted] = useState(false);
 
-  // Load-in timeline + scroll parallax
+  // The server cannot know the motion preference, so `initial` must stay
+  // constant — branching on it here is a hydration mismatch. Instead the effect
+  // below flips `started` immediately for reduced-motion users, and this makes
+  // that flip instant rather than a 1s slide.
+  const reduce = useReducedMotion();
+  const instant = reduce ? { duration: 0 } : undefined;
+
+  // Parallax drift of the accent layer, tied to this section's scroll range.
+  const { scrollYProgress } = useScroll({
+    target: root,
+    offset: ["start start", "end start"],
+  });
+  const blobY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
+
+  // Hold the reveal until the intro overlay lifts. The timeout is a safety net:
+  // if the preloader ever fails to fire `intro:done`, the headline would
+  // otherwise stay off-screen — i.e. a blank hero. Never let the intro gate
+  // the content.
   useEffect(() => {
-    const reduce = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    const el = root.current;
-    if (!el) return;
-
-    let cleanupStart: (() => void) | undefined;
-
-    const ctx = gsap.context(() => {
-      if (!reduce) {
-        gsap.set("[data-hero-line] > span", { yPercent: 120 });
-        const tl = gsap.timeline({ paused: true });
-        tl.to("[data-hero-line] > span", {
-          yPercent: 0,
-          duration: 1,
-          ease: "power4.out",
-          stagger: 0.12,
-        }).from(
-          "[data-hero-fade]",
-          { opacity: 0, y: 20, duration: 0.8, stagger: 0.12, ease: "power2.out" },
-          "-=0.5"
-        );
-
-        // Play the reveal as the intro overlay lifts (or immediately if no intro)
-        const start = () => tl.play();
-        if (
-          (window as typeof window & { __introDone?: boolean }).__introDone
-        ) {
-          start();
-        } else {
-          window.addEventListener("intro:done", start, { once: true });
-          cleanupStart = () => window.removeEventListener("intro:done", start);
-        }
-
-        // Parallax drift of the accent layer
-        gsap.to(blob.current, {
-          yPercent: 25,
-          ease: "none",
-          scrollTrigger: {
-            trigger: el,
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-      }
-    }, el);
-
+    // Reduced motion: reveal at once, never wait on the intro.
+    if (
+      reduce ||
+      (window as typeof window & { __introDone?: boolean }).__introDone
+    ) {
+      setStarted(true);
+      return;
+    }
+    const start = () => setStarted(true);
+    window.addEventListener("intro:done", start, { once: true });
+    const failsafe = window.setTimeout(start, 3000);
     return () => {
-      cleanupStart?.();
-      ctx.revert();
+      window.clearTimeout(failsafe);
+      window.removeEventListener("intro:done", start);
     };
-  }, []);
+  }, [reduce]);
 
   // Rotating word
   useEffect(() => {
@@ -92,7 +91,11 @@ export default function Hero() {
       className="relative flex min-h-svh flex-col justify-center overflow-hidden px-6 pb-16 pt-28 md:px-10 md:pt-28"
     >
       {/* Accent: WebGL aurora on desktop, cheap CSS gradient on mobile */}
-      <div ref={blob} aria-hidden className="pointer-events-none absolute inset-0 z-0">
+      <motion.div
+        aria-hidden
+        style={{ y: blobY }}
+        className="pointer-events-none absolute inset-0 z-0"
+      >
         <div className="absolute inset-0">
           <HeroShader />
         </div>
@@ -100,31 +103,38 @@ export default function Hero() {
           className="absolute right-0 top-0 h-[80vw] w-[80vw] md:hidden"
           style={{
             background:
-              "radial-gradient(circle at 75% 25%, rgba(43,54,240,0.18), transparent 60%)",
+              "radial-gradient(circle at 75% 25%, color-mix(in srgb, var(--cobalt) 18%, transparent), transparent 60%)",
           }}
         />
-      </div>
+      </motion.div>
 
       {/* Headline */}
       <div className="relative z-10">
         <h1 className="font-display font-semibold leading-[0.92] tracking-tight text-ink">
-          <span
-            data-hero-line
-            className="block overflow-hidden text-[13vw] md:text-[9.2vw]"
-          >
-            <span className="inline-block will-change-transform">
-              I build software
+          {["I build software", "products that"].map((line, i) => (
+            <span
+              key={line}
+              className="block overflow-hidden text-[clamp(2.5rem,9.2vw,8rem)]"
+            >
+              <motion.span
+                data-reveal
+                className="inline-block will-change-transform"
+                variants={lines}
+                custom={i}
+                initial="hidden"
+                animate={started ? "show" : "hidden"}
+                transition={instant}
+              >
+                {line}
+              </motion.span>
             </span>
-          </span>
+          ))}
+          {/* Screen readers get one stable sentence; the rotating stack is decorative. */}
+          <span className="sr-only">win customers.</span>
           <span
-            data-hero-line
-            className="block overflow-hidden text-[13vw] md:text-[9.2vw]"
+            aria-hidden
+            className="mt-1 flex items-baseline text-[clamp(2.5rem,9.2vw,8rem)] text-cobalt"
           >
-            <span className="inline-block will-change-transform">
-              products that
-            </span>
-          </span>
-          <span className="mt-1 flex items-baseline text-[13vw] text-cobalt md:text-[9.2vw]">
             <span className="relative inline-block h-[1.05em] overflow-hidden align-bottom leading-[1.05]">
               <motion.span
                 className="flex flex-col"
@@ -148,15 +158,28 @@ export default function Hero() {
 
       {/* Bottom row: intro + CTA */}
       <div className="relative z-10 mt-10 flex flex-col gap-8 border-t border-line pt-8 md:flex-row md:items-end md:justify-between">
-        <p
-          data-hero-fade
+        <motion.p
+          data-reveal
+          variants={fade}
+          custom={0}
+          initial="hidden"
+          animate={started ? "show" : "hidden"}
+          transition={instant}
           className="max-w-md text-base leading-relaxed text-ink-soft md:text-lg"
         >
           Sameer Ahmed — a full-stack engineer building modern, AI-powered
           products end to end. From first idea to production, for teams who need
           it shipped right.
-        </p>
-        <div data-hero-fade className="flex flex-col items-start gap-3 md:items-end">
+        </motion.p>
+        <motion.div
+          data-reveal
+          variants={fade}
+          custom={1}
+          initial="hidden"
+          animate={started ? "show" : "hidden"}
+          transition={instant}
+          className="flex flex-col items-start gap-3 md:items-end"
+        >
           <MagneticButton href="#contact">
             Book a call
             <span aria-hidden className="transition-transform group-hover:translate-x-1">
@@ -166,7 +189,7 @@ export default function Hero() {
           <p className="font-mono text-[11px] uppercase tracking-wider text-stone">
             Free 20-min call · usually replies within a day
           </p>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -32,8 +32,7 @@ export default function Services() {
             What I do
           </h2>
           <p className="hidden max-w-xs text-sm text-ink-soft md:block">
-            One engineer across the whole stack — so you don&apos;t have to wrangle
-            a team of freelancers.
+            Four areas I work in. Most projects touch three of them.
           </p>
         </Reveal>
 

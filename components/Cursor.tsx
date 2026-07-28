@@ -14,8 +14,11 @@ export default function Cursor() {
 
   useEffect(() => {
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (!fine) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!fine || reduce) return;
     setEnabled(true);
+    // Only now does CSS hide the native cursor — see .has-custom-cursor
+    document.body.classList.add("has-custom-cursor");
 
     let x = window.innerWidth / 2;
     let y = window.innerHeight / 2;
@@ -48,6 +51,7 @@ export default function Cursor() {
     return () => {
       window.removeEventListener("mousemove", move);
       cancelAnimationFrame(frame);
+      document.body.classList.remove("has-custom-cursor");
     };
   }, []);
 

@@ -1,14 +1,13 @@
 import Nav from "@/components/sections/Nav";
 import Hero from "@/components/sections/Hero";
 import MarqueeStrip from "@/components/sections/MarqueeStrip";
-import Logos from "@/components/sections/Logos";
-import About from "@/components/sections/About";
+import Audience from "@/components/sections/Audience";
 import AboutMe from "@/components/sections/AboutMe";
 import Stats from "@/components/sections/Stats";
 import Services from "@/components/sections/Services";
 import Process from "@/components/sections/Process";
 import Work from "@/components/sections/Work";
-import Testimonials from "@/components/sections/Testimonials";
+import Activity from "@/components/sections/Activity";
 import FAQ from "@/components/sections/FAQ";
 import Contact from "@/components/sections/Contact";
 
@@ -18,14 +17,13 @@ export default function Home() {
       <Nav />
       <Hero />
       <MarqueeStrip />
-      <Logos />
-      <About />
+      <Audience />
       <AboutMe />
       <Stats />
       <Services />
       <Process />
       <Work />
-      <Testimonials />
+      <Activity />
       <FAQ />
       <Contact />
     </main>
