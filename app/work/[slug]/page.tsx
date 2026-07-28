@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { WORK, bySlug } from "@/lib/work";
@@ -29,6 +30,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: study.kind,
       url: path,
       type: "article",
+      // Declaring `openGraph` here replaces the parent's block outright, which
+      // silently dropped the site-wide opengraph-image on studies without a
+      // screenshot. Always set it: the screenshot where there is one, the
+      // generated card otherwise.
+      images: [study.image ?? "/opengraph-image"],
     },
   };
 }
@@ -115,6 +121,24 @@ export default async function WorkDetail({ params }: Props) {
                 </a>
               )}
             </div>
+          </Reveal>
+        )}
+
+        {study.image && (
+          <Reveal delay={0.14}>
+            {/* Sized from the source screenshot so the browser reserves the
+                right space and the text below doesn't jump on load. */}
+            <figure className="mt-14 overflow-hidden rounded-2xl border border-line bg-bone-deep">
+              <Image
+                src={study.image}
+                alt={study.imageAlt ?? ""}
+                width={1200}
+                height={750}
+                sizes="(max-width: 768px) 100vw, 720px"
+                className="h-auto w-full object-cover"
+                priority
+              />
+            </figure>
           </Reveal>
         )}
 

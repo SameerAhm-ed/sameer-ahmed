@@ -13,8 +13,12 @@ export type CaseStudy = {
   /** One line on what it does — not a category label. */
   kind: string;
   year: string;
-  /** Gradient stand-in until there's a real screenshot. */
+  /** Gradient, used as the backdrop and as the fallback where `image` is absent. */
   grad: string;
+  /** Real screenshot in /public/work. Optional: only some projects have one. */
+  image?: string;
+  /** Describes the screenshot for screen readers. Required whenever `image` is set. */
+  imageAlt?: string;
   /** Shown on the detail page. */
   role: string;
   stack: string[];
@@ -33,6 +37,9 @@ export const WORK: CaseStudy[] = [
     kind: "Client ERP for a heel manufacturing and wholesale business",
     year: "2026",
     grad: "linear-gradient(135deg, #2b36f0, #15140f)",
+    image: "/work/aiza-heels-erp.webp",
+    imageAlt:
+      "The Aiza Heels ERP dashboard: sales KPIs, a 30-day sales trend, expenses by category and low-stock alerts.",
     role: "Sole engineer: schema, services layer, UI, reporting",
     stack: ["Next.js 16", "TypeScript", "SQLite + Drizzle", "Zod", "Tailwind CSS", "Recharts"],
     outcome: "Invoicing, stock, ledgers and P&L for a working business, on one SQLite file.",
@@ -98,6 +105,9 @@ export const WORK: CaseStudy[] = [
     kind: "Fully local RAG chatbot that refuses to guess, and proves it",
     year: "2026",
     grad: "linear-gradient(135deg, #15140f, #2b36f0)",
+    image: "/work/rag-support-assistant.webp",
+    imageAlt:
+      "The support assistant on a phone, showing an answer with the source document cited beneath it.",
     role: "Sole engineer: retrieval pipeline, backend, UI, eval harness",
     stack: ["FastAPI", "Python 3.12", "ChromaDB", "Llama 3.2", "React 19", "Vite"],
     outcome: "7/7 on a live eval, including correctly saying “I don't know”.",

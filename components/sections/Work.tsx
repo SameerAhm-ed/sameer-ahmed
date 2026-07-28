@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/ui/Reveal";
 import { WORK } from "@/lib/work";
@@ -119,12 +120,31 @@ export default function Work() {
         {WORK.map((w, i) => (
           <div
             key={w.slug}
-            className="absolute inset-0 flex items-end p-5 transition-opacity duration-200"
+            className="absolute inset-0 transition-opacity duration-200"
             style={{ background: w.grad, opacity: active === i ? 1 : 0 }}
           >
-            <span className="font-display text-lg font-medium text-bone mix-blend-difference">
-              {w.name}
-            </span>
+            {w.image && (
+              <Image
+                src={w.image}
+                alt=""
+                fill
+                sizes="288px"
+                // Eager: the card sits behind an opacity-0 parent, so lazy
+                // loading never fires and the preview flashes empty the first
+                // time it's hovered. They're ~40 KB each.
+                loading="eager"
+                // Screenshots are wider or taller than the card, so the top-left
+                // is what gets kept: that's where the interface identifies itself.
+                className="object-cover object-left-top"
+              />
+            )}
+            {/* The label sits on the screenshot, so it needs its own contrast
+                rather than relying on whatever pixels are underneath. */}
+            <div className="absolute inset-0 flex items-end bg-gradient-to-t from-ink/85 via-ink/20 to-transparent p-5">
+              <span className="font-display text-lg font-medium text-bone">
+                {w.name}
+              </span>
+            </div>
           </div>
         ))}
       </div>
