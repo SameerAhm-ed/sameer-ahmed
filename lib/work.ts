@@ -101,7 +101,7 @@ export const WORK: CaseStudy[] = [
   },
   {
     slug: "rag-support-assistant",
-    name: "Grounded Support Assistant",
+    name: "Support Assistant For AM",
     kind: "Fully local RAG chatbot that refuses to guess, and proves it",
     year: "2026",
     grad: "linear-gradient(135deg, #15140f, #2b36f0)",

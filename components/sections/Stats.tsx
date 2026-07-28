@@ -8,7 +8,7 @@ import Reveal from "@/components/ui/Reveal";
 //
 //   1. Aiza Heels ERP              aiza-heels-erp              client work
 //   2. Artistic Milliners EMS      auth-app                    live, behind auth
-//   3. Grounded Support Assistant  artistic-milliners-rag-bot  source only
+//   3. Support Assistant For AM    artistic-milliners-rag-bot  source only
 //   4. SamDocs                     samdocs                     source only
 //   5. Aurum                       gold-analytics              source only
 //   6. Sameer Associates           sameer_associates           live
