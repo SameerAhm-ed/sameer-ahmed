@@ -6,16 +6,16 @@ import Reveal from "@/components/ui/Reveal";
 // github.com/SameerAhm-ed, excluding tutorials, hackathon exercises and
 // learning repos:
 //
-//   1. Artistic Milliners EMS      auth-app                    deployment down
+//   1. Artistic Milliners EMS      auth-app                    live, behind auth
 //   2. Grounded Support Assistant  artistic-milliners-rag-bot  source only
 //   3. SamDocs                     samdocs                     source only
 //   4. Aurum                       gold-analytics              source only
-//   5. Sameer Associates           sameer_associates           live, verified
-//   6. Management System           management-system           live, verified
+//   5. Sameer Associates           sameer_associates           live
+//   6. Management System           management-system           live
 //
-// Only two of the six currently answer on a URL. The others are defensible in
-// an interview from the code, but "shipped" is easiest to defend when someone
-// can click it — redeploying EMS would do the most for this number.
+// Three of the six answer on a URL. The other three are defensible from the
+// code, but "shipped" lands hardest when someone can click it: a deployed
+// demo of SamDocs or the RAG bot would strengthen this number most.
 // This portfolio is deliberately not counted.
 const STATS = [
   { value: 2, suffix: "+", label: "Years shipping production software" },

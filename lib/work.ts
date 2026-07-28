@@ -36,9 +36,9 @@ export const WORK: CaseStudy[] = [
     role: "Sole engineer: data layer, backend, UI, deployment",
     stack: ["Next.js", "TypeScript", "MS SQL Server", "Tailwind CSS", "PWA"],
     outcome: "Eight utility units across four sites, polled live on one screen.",
-    // The old deployment at auth-app-omega.vercel.app is gone (Vercel returns
-    // DEPLOYMENT_NOT_FOUND), so there is no live link to give. Restore `href`
-    // once it is redeployed — a dead "Live site" button is worse than none.
+    // Redirects to /login — the dashboard is behind auth, so a visitor sees a
+    // sign-in screen rather than the telemetry.
+    href: "https://auth-app-omega.vercel.app",
     repo: "https://github.com/SameerAhm-ed/auth-app",
     sections: [
       {
