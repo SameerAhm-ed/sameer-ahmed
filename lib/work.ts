@@ -40,7 +40,7 @@ export const WORK: CaseStudy[] = [
     image: "/work/aiza-heels-erp.webp",
     imageAlt:
       "The Aiza Heels ERP dashboard: sales KPIs, a 30-day sales trend, expenses by category and low-stock alerts.",
-    role: "Sole engineer: schema, services layer, UI, reporting",
+    role: "Built solo: schema, services layer, UI, reporting",
     stack: ["Next.js 16", "TypeScript", "SQLite + Drizzle", "Zod", "Tailwind CSS", "Recharts"],
     outcome: "Invoicing, stock, ledgers and P&L for a working business, on one SQLite file.",
     repo: "https://github.com/SameerAhm-ed/aiza-heels-erp",
@@ -54,12 +54,12 @@ export const WORK: CaseStudy[] = [
         body: "One system covering the whole cycle: sales invoicing, purchasing, inventory with size and colour variants, customer and supplier ledgers, expenses, cash flow, and financial reports. Recording a sale checks stock, decrements the right variant, writes the ledger entry and updates the customer balance in a single operation, so the numbers agree with each other by construction and there is nothing to reconcile later.",
       },
       {
-        heading: "Money is stored as integers",
-        body: "Every monetary value is held as integer paisa and converted only at the API boundary. Floating-point money drifts: put enough discounted lines on an invoice and the total can land a paisa away from what the customer was actually charged. In a running ledger that error never cancels out, it accumulates. Integer arithmetic is exact, and keeping the conversion at one boundary means the rest of the code cannot reintroduce the problem.",
+        heading: "Every rupee has to add up",
+        body: "Computers do decimal math with tiny rounding errors that are usually invisible. Stack a discount and a tax rate on an invoice and a customer could be charged a fraction of a paisa off from what the receipt says. That sounds too small to matter, but it happens on every invoice, and in a running ledger those fractions never cancel out, they accumulate. Enough of them and the books stop matching the bank statement, and someone has to go hunting for the difference by hand. I built the money handling so the system never approximates: every amount is calculated in whole paisa, so a rupee is a rupee, on every invoice, forever.",
       },
       {
-        heading: "Invoice numbers have to be atomic",
-        body: "Invoice numbers are allocated atomically in the form INV-YYYY-NNNN. Sequential numbering reads like a trivial feature until two invoices are created in the same moment and collide. A duplicate invoice number is the kind of quiet data problem that stays invisible for months and then surfaces during a tax audit, which is the worst possible time to find it.",
+        heading: "No two invoices can share a number",
+        body: "If two people create an invoice at nearly the same moment, a careless system can hand out the same number to both. It looks like a small glitch, and it stays invisible for months, until a tax audit turns up two invoices with the same number and now every record has to be checked by hand. I built the numbering so the database itself guarantees each invoice gets a number nobody else can claim, rather than relying on two people never clicking at exactly the same second.",
       },
       {
         heading: "Built for how the business actually works",
@@ -73,7 +73,7 @@ export const WORK: CaseStudy[] = [
     kind: "Real-time energy monitoring across four manufacturing sites",
     year: "2026",
     grad: "linear-gradient(135deg, #2b36f0, #6b74ff)",
-    role: "Sole engineer: data layer, backend, UI, deployment",
+    role: "Built solo: data layer, backend, UI, deployment",
     stack: ["Next.js", "TypeScript", "MS SQL Server", "Tailwind CSS", "PWA"],
     outcome: "Eight utility units across four sites, polled live on one screen.",
     // Redirects to /login — the dashboard is behind auth, so a visitor sees a
@@ -108,7 +108,7 @@ export const WORK: CaseStudy[] = [
     image: "/work/rag-support-assistant.webp",
     imageAlt:
       "The support assistant on a phone, showing an answer with the source document cited beneath it.",
-    role: "Sole engineer: retrieval pipeline, backend, UI, eval harness",
+    role: "Built solo: retrieval pipeline, backend, UI, eval harness",
     stack: ["FastAPI", "Python 3.12", "ChromaDB", "Llama 3.2", "React 19", "Vite"],
     outcome: "7/7 on a live eval, including correctly saying “I don't know”.",
     repo: "https://github.com/SameerAhm-ed/artistic-milliners-rag-bot",
@@ -141,7 +141,7 @@ export const WORK: CaseStudy[] = [
     kind: "RAG-as-a-service: upload documents, get cited answers",
     year: "2026",
     grad: "linear-gradient(135deg, #6b74ff, #2b36f0)",
-    role: "Sole engineer: full stack and infrastructure",
+    role: "Built solo, full stack and infrastructure",
     stack: ["FastAPI", "LangChain", "PostgreSQL + pgvector", "Next.js", "TypeScript", "Docker"],
     outcome: "One `docker compose up` from clone to working RAG stack.",
     repo: "https://github.com/SameerAhm-ed/samdocs",
