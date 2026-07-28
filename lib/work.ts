@@ -28,6 +28,39 @@ export type CaseStudy = {
 
 export const WORK: CaseStudy[] = [
   {
+    slug: "aiza-heels-erp",
+    name: "Aiza Heels ERP",
+    kind: "Client ERP for a heel manufacturing and wholesale business",
+    year: "2026",
+    grad: "linear-gradient(135deg, #2b36f0, #15140f)",
+    role: "Sole engineer: schema, services layer, UI, reporting",
+    stack: ["Next.js 16", "TypeScript", "SQLite + Drizzle", "Zod", "Tailwind CSS", "Recharts"],
+    outcome: "Invoicing, stock, ledgers and P&L for a working business, on one SQLite file.",
+    repo: "https://github.com/SameerAhm-ed/aiza-heels-erp",
+    sections: [
+      {
+        heading: "The problem",
+        body: "A small manufacturing and wholesale business runs on an invoice book, a stock list and a ledger until the day nobody can answer the basic questions: how many of that size are left, what does this customer still owe, did we actually make money last month. The information exists, but it lives in three places that only get reconciled by hand, and usually only after something has already gone wrong.",
+      },
+      {
+        heading: "What I built",
+        body: "One system covering the whole cycle: sales invoicing, purchasing, inventory with size and colour variants, customer and supplier ledgers, expenses, cash flow, and financial reports. Recording a sale checks stock, decrements the right variant, writes the ledger entry and updates the customer balance in a single operation, so the numbers agree with each other by construction and there is nothing to reconcile later.",
+      },
+      {
+        heading: "Money is stored as integers",
+        body: "Every monetary value is held as integer paisa and converted only at the API boundary. Floating-point money drifts: put enough discounted lines on an invoice and the total can land a paisa away from what the customer was actually charged. In a running ledger that error never cancels out, it accumulates. Integer arithmetic is exact, and keeping the conversion at one boundary means the rest of the code cannot reintroduce the problem.",
+      },
+      {
+        heading: "Invoice numbers have to be atomic",
+        body: "Invoice numbers are allocated atomically in the form INV-YYYY-NNNN. Sequential numbering reads like a trivial feature until two invoices are created in the same moment and collide. A duplicate invoice number is the kind of quiet data problem that stays invisible for months and then surfaces during a tax audit, which is the worst possible time to find it.",
+      },
+      {
+        heading: "Built for how the business actually works",
+        body: "Ledger statements render as paper, because a wholesale customer settling an account expects a printed statement in their hand. Reports export to CSV, because the accountant works in Excel and always will. The whole thing runs from a single SQLite file with no external services, so for a one-operator business there is no monthly cloud bill and nothing that has to stay reachable for the system to keep working.",
+      },
+    ],
+  },
+  {
     slug: "energy-monitoring-system",
     name: "Artistic Milliners EMS",
     kind: "Real-time energy monitoring across four manufacturing sites",

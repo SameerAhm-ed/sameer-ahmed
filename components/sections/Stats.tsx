@@ -6,20 +6,21 @@ import Reveal from "@/components/ui/Reveal";
 // github.com/SameerAhm-ed, excluding tutorials, hackathon exercises and
 // learning repos:
 //
-//   1. Artistic Milliners EMS      auth-app                    live, behind auth
-//   2. Grounded Support Assistant  artistic-milliners-rag-bot  source only
-//   3. SamDocs                     samdocs                     source only
-//   4. Aurum                       gold-analytics              source only
-//   5. Sameer Associates           sameer_associates           live
-//   6. Management System           management-system           live
+//   1. Aiza Heels ERP              aiza-heels-erp              client work
+//   2. Artistic Milliners EMS      auth-app                    live, behind auth
+//   3. Grounded Support Assistant  artistic-milliners-rag-bot  source only
+//   4. SamDocs                     samdocs                     source only
+//   5. Aurum                       gold-analytics              source only
+//   6. Sameer Associates           sameer_associates           live
+//   7. Management System           management-system           live
 //
-// Three of the six answer on a URL. The other three are defensible from the
-// code, but "shipped" lands hardest when someone can click it: a deployed
-// demo of SamDocs or the RAG bot would strengthen this number most.
+// The ERP is the strongest of the seven: it was built for a paying client and
+// is in use, which the other six can't claim. "Built and deployed solo" below
+// still holds, but confirm it stays true if anyone else touches the ERP.
 // This portfolio is deliberately not counted.
 const STATS = [
   { value: 2, suffix: "+", label: "Years shipping production software" },
-  { value: 6, suffix: "", label: "Products shipped end to end" },
+  { value: 7, suffix: "", label: "Products shipped end to end" },
   { value: 100, suffix: "%", label: "Built and deployed solo" },
 ];
 
