@@ -6,7 +6,11 @@ import ThemeToggle from "@/components/ui/ThemeToggle";
 export default function Nav() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 mix-blend-difference">
-      <nav className="flex items-center justify-between px-6 py-5 text-bone md:px-10">
+      {/* text-bone would track the theme token, but --bone flips to near-black
+          in dark mode — the same value the hero background already sits at.
+          A mix-blend-difference trick needs one fixed reference colour to
+          invert against; theming it makes the nav invisible in dark mode. */}
+      <nav className="flex items-center justify-between px-6 py-5 text-[#e9e7df] md:px-10">
         <a href="#top" className="font-display text-lg font-semibold tracking-tight">
           Sameer Ahmed
         </a>

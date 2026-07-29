@@ -167,9 +167,17 @@ export default function Work() {
               />
             )}
             {/* The label sits on the screenshot, so it needs its own contrast
-                rather than relying on whatever pixels are underneath. */}
-            <div className="absolute inset-0 flex items-end bg-gradient-to-t from-ink/85 via-ink/20 to-transparent p-5">
-              <span className="font-display text-lg font-medium text-bone">
+                rather than relying on whatever pixels are underneath — fixed
+                colours, not ink/bone, since those flip in dark mode and
+                inverted to a dark label on a light scrim. */}
+            <div
+              className="absolute inset-0 flex items-end p-5"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(21,20,15,0.85), rgba(21,20,15,0.2) 55%, transparent)",
+              }}
+            >
+              <span className="font-display text-lg font-medium text-[#e9e7df]">
                 {w.name}
               </span>
             </div>
