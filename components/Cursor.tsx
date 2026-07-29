@@ -14,8 +14,7 @@ export default function Cursor() {
 
   useEffect(() => {
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!fine || reduce) return;
+    if (!fine) return;
     setEnabled(true);
     // Only now does CSS hide the native cursor — see .has-custom-cursor
     document.body.classList.add("has-custom-cursor");

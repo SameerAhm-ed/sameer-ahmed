@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 
 /**
  * Counts up from 0 to `value` once it scrolls into view.
- * Reduced-motion users see the final value immediately.
  */
 export default function CountUp({
   value,
@@ -20,16 +19,8 @@ export default function CountUp({
   const done = useRef(false);
 
   useEffect(() => {
-    const reduce = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
     const el = ref.current;
     if (!el) return;
-
-    if (reduce) {
-      setDisplay(value);
-      return;
-    }
 
     const io = new IntersectionObserver(
       (entries) => {

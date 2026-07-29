@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment } from "react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 type Props = {
   text: string;
@@ -37,19 +37,13 @@ export default function RevealText({
   const Tag = motion[as];
   const words = text.split(" ");
 
-  // `initial` must not branch on this — the server can't know the preference,
-  // and diverging here is a hydration mismatch. Collapse the durations instead:
-  // the words still land in place, they just don't travel.
-  const reduce = useReducedMotion();
-
   return (
     <Tag
       className={className}
       variants={container}
-      custom={reduce ? 0 : stagger}
+      custom={stagger}
       initial="hidden"
       whileInView="show"
-      transition={reduce ? { duration: 0 } : undefined}
       viewport={{ once: true, margin: "0px 0px -15% 0px" }}
     >
       {words.map((w, i) => (

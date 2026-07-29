@@ -1,13 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-  type Variants,
-} from "framer-motion";
+import { motion, useScroll, useTransform, type Variants } from "framer-motion";
 import MagneticButton from "@/components/ui/MagneticButton";
 import HeroShader from "@/components/ui/HeroShader";
 
@@ -35,13 +29,6 @@ export default function Hero() {
   const [word, setWord] = useState(0);
   const [started, setStarted] = useState(false);
 
-  // The server cannot know the motion preference, so `initial` must stay
-  // constant — branching on it here is a hydration mismatch. Instead the effect
-  // below flips `started` immediately for reduced-motion users, and this makes
-  // that flip instant rather than a 1s slide.
-  const reduce = useReducedMotion();
-  const instant = reduce ? { duration: 0 } : undefined;
-
   // Parallax drift of the accent layer, tied to this section's scroll range.
   const { scrollYProgress } = useScroll({
     target: root,
@@ -54,11 +41,7 @@ export default function Hero() {
   // otherwise stay off-screen — i.e. a blank hero. Never let the intro gate
   // the content.
   useEffect(() => {
-    // Reduced motion: reveal at once, never wait on the intro.
-    if (
-      reduce ||
-      (window as typeof window & { __introDone?: boolean }).__introDone
-    ) {
+    if ((window as typeof window & { __introDone?: boolean }).__introDone) {
       setStarted(true);
       return;
     }
@@ -69,14 +52,10 @@ export default function Hero() {
       window.clearTimeout(failsafe);
       window.removeEventListener("intro:done", start);
     };
-  }, [reduce]);
+  }, []);
 
   // Rotating word
   useEffect(() => {
-    const reduce = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (reduce) return;
     const id = setInterval(
       () => setWord((w) => (w + 1) % ROTATING.length),
       2200
@@ -123,7 +102,6 @@ export default function Hero() {
                 custom={i}
                 initial="hidden"
                 animate={started ? "show" : "hidden"}
-                transition={instant}
               >
                 {line}
               </motion.span>
@@ -164,7 +142,6 @@ export default function Hero() {
           custom={0}
           initial="hidden"
           animate={started ? "show" : "hidden"}
-          transition={instant}
           className="max-w-md text-base leading-relaxed text-ink-soft md:text-lg"
         >
           Sameer Ahmed, full-stack engineer. I build AI-powered products end to
@@ -177,7 +154,6 @@ export default function Hero() {
           custom={1}
           initial="hidden"
           animate={started ? "show" : "hidden"}
-          transition={instant}
           className="flex flex-col items-start gap-3 md:items-end"
         >
           <MagneticButton href="#contact">

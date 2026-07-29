@@ -62,12 +62,11 @@ export default function HeroShader() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [enabled, setEnabled] = useState(false);
 
-  // Only run on fine-pointer desktops with motion enabled.
+  // Only run on fine-pointer desktops.
   useEffect(() => {
     const ok =
       window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
-      window.matchMedia("(min-width: 768px)").matches &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.matchMedia("(min-width: 768px)").matches;
     setEnabled(ok);
   }, []);
 

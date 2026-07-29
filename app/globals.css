@@ -199,34 +199,6 @@ body::after {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-  .animate-marquee,
-  .animate-marquee-rev {
-    animation: none;
-  }
-  body {
-    cursor: auto;
-  }
-
-  /* Content that is hidden purely so it can animate in must never depend on
-     that animation actually running. This overrides the inline styles the
-     motion library writes, so a reveal can never strand text off-screen or at
-     zero opacity for someone who asked for less motion. */
-  [data-reveal] {
-    transform: none !important;
-    opacity: 1 !important;
-  }
-
-  /* Scroll-linked parallax is pure decoration — hold it still. */
-  [data-parallax] {
-    transform: none !important;
-  }
-}
+/* Reduced-motion handling was removed deliberately: the animations are the
+   product being demonstrated here, and the owner chose to always play them.
+   See the git history of this block before restoring it. */
