@@ -118,6 +118,12 @@ body::after {
     drop-shadow(0 2px 3px rgba(240, 238, 230, 0.16));
 }
 
+/* See SKIP_INTRO_INIT in app/layout.tsx: hides the preloader before its first
+   paint on a repeat load this session, instead of flashing then vanishing. */
+[data-skip-intro] [data-preloader] {
+  display: none !important;
+}
+
 /* Custom cursor — only once <Cursor> has actually mounted and set the class.
    Gating on the class means a JS failure leaves the native cursor intact
    instead of leaving the user with no pointer at all. */

@@ -74,6 +74,13 @@ const PERSON_SCHEMA = {
 // otherwise the page flashes light before hydration can correct it.
 const THEME_INIT = `(function(){try{var s=localStorage.getItem('theme');var d=s?s==='dark':matchMedia('(prefers-color-scheme: dark)').matches;if(d)document.documentElement.setAttribute('data-theme','dark');}catch(e){}})()`;
 
+// Preloader.tsx skips its 0->100 count on a repeat load this session, and for
+// reduced-motion users on every load — but both checks live in a useEffect,
+// which only runs after the full overlay has already committed to the DOM
+// and painted once. This hides it via CSS before that first paint, for
+// exactly the same two conditions Preloader.tsx checks.
+const SKIP_INTRO_INIT = `(function(){try{var seen=sessionStorage.getItem('intro:seen');var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;if(seen||reduce)document.documentElement.setAttribute('data-skip-intro','1');}catch(e){}})()`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -90,6 +97,11 @@ export default function RootLayout({
           id="theme-init"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: THEME_INIT }}
+        />
+        <Script
+          id="skip-intro-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: SKIP_INTRO_INIT }}
         />
         <Script
           id="person-schema"
