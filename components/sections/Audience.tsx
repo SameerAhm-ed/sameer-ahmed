@@ -27,14 +27,14 @@ const TRACKS = [
   {
     eyebrow: "You're hiring",
     title: "Looking at me for a role",
-    body: "How I work, what I've shipped, and what two years of owning things end to end actually taught me.",
+    body: "Here's how I work, what I've shipped, and what two years of owning things end to end actually taught me.",
     href: "#aboutme",
     cta: "Read the background",
   },
   {
     eyebrow: "You're building",
     title: "You need something built",
-    body: "Scope, timelines, and pricing for project work, plus what I take on and how a project runs.",
+    body: "Here's the scope, timelines, and pricing for project work, plus what I take on and how a project runs.",
     href: "#faq",
     cta: "See how projects work",
   },

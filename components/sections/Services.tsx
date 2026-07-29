@@ -34,12 +34,12 @@ const SERVICES = [
   },
   {
     title: "Cloud & Infrastructure",
-    body: "Deploy, scale, and keep it fast. AWS/Vercel, CI/CD, and performance so it holds up in production.",
+    body: "Deploy, scale, and keep it fast. I run it on AWS or Vercel, wire up CI/CD, and tune performance so it holds up in production.",
     tags: ["AWS", "CI/CD", "Performance"],
   },
   {
     title: "Product Design & UX",
-    body: "Interfaces and brand details people trust on sight. Type, spacing, states, and the small things that read as care.",
+    body: "Interfaces and brand details people trust on sight. Type, spacing, states, and the small details get the same care as the code.",
     tags: ["UI/UX", "Design Systems", "Brand"],
   },
 ];

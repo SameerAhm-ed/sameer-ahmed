@@ -34,7 +34,7 @@ const STEPS = [
   {
     n: "03",
     title: "Build",
-    body: "Full-stack engineering: front-end, APIs, data, and any AI wired in. Faithful to the design, tested, and ready for real traffic.",
+    body: "I build full-stack: front-end, APIs, data, and any AI that's wired in. It stays faithful to the design, gets tested, and is ready for real traffic.",
   },
   {
     n: "04",

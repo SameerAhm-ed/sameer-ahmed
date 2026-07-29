@@ -28,8 +28,8 @@ export default function AboutMe() {
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="font-display text-3xl font-semibold leading-tight tracking-tight text-ink md:text-5xl">
-              Hi, I&apos;m Sameer. I build whole products, database up to
-              interface.
+              Hi, I&apos;m Sameer. I build whole products, from the database
+              to the interface.
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
@@ -42,8 +42,8 @@ export default function AboutMe() {
               <p>
                 Two years is not a long time. It is long enough to have shipped
                 real things, broken them in production, and learned what that
-                costs. Which is mostly what I&apos;d want to know about someone
-                I was hiring.
+                costs, which is mostly what I&apos;d want to know about
+                someone I was hiring.
               </p>
             </div>
           </Reveal>
