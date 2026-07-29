@@ -31,7 +31,7 @@ const jetbrains = JetBrains_Mono({
 // metadataBase, the OpenGraph url and the JSON-LD all read from it.
 const SITE = "https://sameer-ahmed.vercel.app";
 const DESCRIPTION =
-  "Full-stack engineer building AI-powered products end to end: architecture, build, ship. Two years of shipping to production.";
+  "I'm a full-stack engineer who builds AI-powered products end to end, from architecture to launch. I've spent two years shipping real products to production.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
