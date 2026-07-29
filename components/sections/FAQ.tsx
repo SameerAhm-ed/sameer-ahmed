@@ -15,7 +15,7 @@ const FAQS = [
   },
   {
     q: "Can you build AI features?",
-    a: "Yes. LLM apps, chatbots, agents, and RAG over your own data, integrated with models like Claude or GPT. They ship with evals, so you can see when one breaks.",
+    a: "Yes. I build LLM apps, chatbots, and agents, with RAG over your own data and integrations with models like Claude or GPT. They ship with evals, so you can see when one breaks.",
   },
   {
     q: "How does pricing work?",
@@ -23,7 +23,7 @@ const FAQS = [
   },
   {
     q: "What do you need from me?",
-    a: "Your goals, access to anything relevant, and timely feedback at the review points. I handle architecture, build, and launch.",
+    a: "I need your goals, access to anything relevant, and timely feedback at the review points. I handle architecture, build, and launch.",
   },
   {
     q: "Do you offer revisions and support?",
