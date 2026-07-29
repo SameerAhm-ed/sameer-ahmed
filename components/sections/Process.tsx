@@ -1,4 +1,24 @@
-import Reveal from "@/components/ui/Reveal";
+"use client";
+
+import { motion, type Variants } from "framer-motion";
+
+// One trigger for the whole list, not one per step — a per-item trigger fires
+// as each step scrolls in, so the stagger delay never has anything to
+// stagger against. Also fixes invalid markup: Reveal renders a div, and
+// <ol><div><li> isn't valid HTML.
+const listStagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+};
+
+const step: Variants = {
+  hidden: { opacity: 0, y: 28 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 const STEPS = [
   {
@@ -50,21 +70,30 @@ export default function Process() {
           </div>
         </div>
 
-        <ol className="md:col-span-7">
-          {STEPS.map((s, i) => (
-            <Reveal key={s.n} delay={i * 0.06}>
-              <li className="border-t border-bone/15 py-10 first:border-t-0 first:pt-0 md:py-12">
-                <span className="font-mono text-sm text-cobalt">{s.n}</span>
-                <h3 className="mt-4 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-                  {s.title}
-                </h3>
-                <p className="mt-4 max-w-md text-lg leading-relaxed text-bone/70">
-                  {s.body}
-                </p>
-              </li>
-            </Reveal>
+        <motion.ol
+          className="md:col-span-7"
+          variants={listStagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          {STEPS.map((s) => (
+            <motion.li
+              key={s.n}
+              data-reveal
+              variants={step}
+              className="border-t border-bone/15 py-10 first:border-t-0 first:pt-0 md:py-12"
+            >
+              <span className="font-mono text-sm text-cobalt">{s.n}</span>
+              <h3 className="mt-4 font-display text-4xl font-semibold tracking-tight md:text-5xl">
+                {s.title}
+              </h3>
+              <p className="mt-4 max-w-md text-lg leading-relaxed text-bone/70">
+                {s.body}
+              </p>
+            </motion.li>
           ))}
-        </ol>
+        </motion.ol>
       </div>
     </section>
   );

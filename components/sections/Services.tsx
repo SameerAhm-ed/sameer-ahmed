@@ -1,4 +1,25 @@
+"use client";
+
+import { motion, type Variants } from "framer-motion";
 import Reveal from "@/components/ui/Reveal";
+
+// A separate whileInView trigger per card meant each one fired the instant it
+// individually entered the viewport — on a 4-up grid that's roughly all at
+// once anyway, but on mobile (1 column) it made the stagger invisible, same
+// bug as the work list. One trigger on the grid, cascaded to the cards.
+const gridStagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+};
+
+const card: Variants = {
+  hidden: { opacity: 0, y: 28 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 const SERVICES = [
   {
@@ -36,39 +57,46 @@ export default function Services() {
           </p>
         </Reveal>
 
-        <div className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
-          {SERVICES.map((s, i) => (
-            <Reveal key={s.title} delay={i * 0.08}>
-              <article
-                data-cursor="hover"
-                className="group flex h-full flex-col justify-between bg-bone p-8 transition-colors duration-300 hover:bg-bone-deep md:p-10"
-              >
-                <div>
-                  <span
-                    aria-hidden
-                    className="inline-block h-2 w-2 rounded-full bg-cobalt transition-transform duration-300 group-hover:scale-150"
-                  />
-                  <h3 className="mt-6 font-display text-2xl font-medium text-ink md:text-3xl">
-                    {s.title}
-                  </h3>
-                  <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">
-                    {s.body}
-                  </p>
-                </div>
-                <ul className="mt-10 flex flex-wrap gap-2">
-                  {s.tags.map((t) => (
-                    <li
-                      key={t}
-                      className="rounded-full border border-line px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-ink-soft transition-colors group-hover:border-ink/30"
-                    >
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            </Reveal>
+        <motion.div
+          className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4"
+          variants={gridStagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+        >
+          {SERVICES.map((s) => (
+            <motion.article
+              key={s.title}
+              data-reveal
+              data-cursor="hover"
+              variants={card}
+              className="group flex h-full flex-col justify-between bg-bone p-8 transition-colors duration-300 hover:bg-bone-deep md:p-10"
+            >
+              <div>
+                <span
+                  aria-hidden
+                  className="inline-block h-2 w-2 rounded-full bg-cobalt transition-transform duration-300 group-hover:scale-150"
+                />
+                <h3 className="mt-6 font-display text-2xl font-medium text-ink md:text-3xl">
+                  {s.title}
+                </h3>
+                <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">
+                  {s.body}
+                </p>
+              </div>
+              <ul className="mt-10 flex flex-wrap gap-2">
+                {s.tags.map((t) => (
+                  <li
+                    key={t}
+                    className="rounded-full border border-line px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-ink-soft transition-colors group-hover:border-ink/30"
+                  >
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

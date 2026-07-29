@@ -1,5 +1,24 @@
+"use client";
+
+import { motion, type Variants } from "framer-motion";
 import CountUp from "@/components/ui/CountUp";
-import Reveal from "@/components/ui/Reveal";
+
+// One trigger for all three, not one each — on the 2-column mobile layout the
+// third stat wraps to its own row and a per-item trigger fires as each
+// individually scrolls in, same dead-stagger bug as the other lists here.
+const gridStagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+};
+
+const stat: Variants = {
+  hidden: { opacity: 0, y: 28 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 // Every number here has to survive being asked "which ones?" in an interview,
 // so the six are named below. Counted from the non-fork repos on
@@ -27,22 +46,31 @@ const STATS = [
 export default function Stats() {
   return (
     <section id="stats" className="border-t border-line px-6 py-20 md:px-10 md:py-28">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-y-12 md:grid-cols-3 md:gap-y-0">
-        {STATS.map((s, i) => (
-          <Reveal key={s.label} delay={i * 0.08}>
-            <div className="md:border-l md:border-line md:pl-6">
-              <p className="font-display text-5xl font-semibold tracking-tight text-ink md:text-7xl">
-                <span className="text-cobalt">
-                  <CountUp value={s.value} suffix={s.suffix} />
-                </span>
-              </p>
-              <p className="mt-3 max-w-[12ch] text-sm text-ink-soft">
-                {s.label}
-              </p>
-            </div>
-          </Reveal>
+      <motion.div
+        className="mx-auto grid max-w-6xl grid-cols-2 gap-y-12 md:grid-cols-3 md:gap-y-0"
+        variants={gridStagger}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-80px" }}
+      >
+        {STATS.map((s) => (
+          <motion.div
+            key={s.label}
+            data-reveal
+            variants={stat}
+            className="md:border-l md:border-line md:pl-6"
+          >
+            <p className="font-display text-5xl font-semibold tracking-tight text-ink md:text-7xl">
+              <span className="text-cobalt">
+                <CountUp value={s.value} suffix={s.suffix} />
+              </span>
+            </p>
+            <p className="mt-3 max-w-[12ch] text-sm text-ink-soft">
+              {s.label}
+            </p>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
