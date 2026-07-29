@@ -6,14 +6,17 @@ import { AnimatePresence, motion } from "framer-motion";
 /**
  * Full-screen intro: a 0→100 counter, then the panel wipes upward to reveal
  * the page. Dispatches `intro:done` (and sets window.__introDone) so the hero
- * reveal plays as the panel lifts. Reduced-motion users skip straight to done.
+ * reveal plays as the panel lifts. Plays unconditionally, including for
+ * reduced-motion users — this is a deliberate one-time brand moment, not
+ * ambient decoration, and was chosen knowingly over the usual accessibility
+ * default of skipping it.
  */
 export default function Preloader() {
   const [count, setCount] = useState(0);
   const [show, setShow] = useState(true);
   // When we're skipping the intro we unmount outright rather than letting
-  // AnimatePresence play an exit. Under reduced motion the exit transform never
-  // runs, so the panel would sit on top of the page forever.
+  // AnimatePresence play an exit, which would otherwise slide a second time
+  // for no reason on a repeat load.
   const [skip, setSkip] = useState(false);
 
   const finish = () => {
@@ -22,15 +25,11 @@ export default function Preloader() {
   };
 
   useEffect(() => {
-    const reduce = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
     // Show the intro once per session. Making a returning visitor sit through
     // it again is a tax, not a delight.
     const seen = sessionStorage.getItem("intro:seen");
 
-    if (reduce || seen) {
+    if (seen) {
       setSkip(true);
       setShow(false);
       finish();
@@ -64,9 +63,8 @@ export default function Preloader() {
     };
   }, []);
 
-  // Bail out above AnimatePresence, not inside it: removing the child while
-  // AnimatePresence is mounted starts an exit animation, and under reduced
-  // motion that animation never runs — leaving the panel on screen for good.
+  // Bail out above AnimatePresence, not inside it — a repeat load should never
+  // show or animate the panel at all, not even its exit slide.
   if (skip) return null;
 
   return (
