@@ -98,7 +98,7 @@ export const WORK: CaseStudy[] = [
     sections: [
       {
         heading: "The problem",
-        body: "Artistic Milliners runs power houses, steam distribution, solar generation and gas lines across four sites: AM4, AM5, AM14 and AM15. The telemetry existed, but it lived in separate SQL Server databases with no shared view. Knowing how a plant was performing meant querying the right database and already knowing which one that was.",
+        body: "Artistic Milliners runs power houses, steam distribution, solar generation and gas lines across four sites: AM4, AM5, AM14 and AM15. The telemetry existed, but it lived in separate SQL Server databases with no shared view. Knowing how a plant was performing meant querying the right database, and already knowing which one.",
       },
       {
         heading: "What I built",
@@ -146,7 +146,7 @@ export const WORK: CaseStudy[] = [
       },
       {
         heading: "It runs on nothing",
-        body: "It runs entirely on ordinary hardware, with no paid AI service involved and no ongoing bill. That's a real limitation, not a flex: the free, local language model is far smaller than something like GPT-4, so it can't paper over a weak search step with general knowledge the way a bigger model could. Which means finding the right passage has to do more of the work, and getting that right took more effort than it would have with a bigger, paid model doing some of the thinking instead.",
+        body: "It runs entirely on ordinary hardware, with no paid AI service involved and no ongoing bill. That's a real limitation, not a flex: the free, local language model is far smaller than something like GPT-4, so it can't paper over a weak search step with general knowledge the way a bigger model could, which means finding the right passage has to do more of the work. Getting that right took more effort than it would have with a bigger, paid model doing some of the thinking instead.",
       },
     ],
   },
