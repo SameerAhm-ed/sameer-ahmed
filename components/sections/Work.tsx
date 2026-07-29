@@ -1,10 +1,26 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion, type Variants } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/ui/Reveal";
 import { WORK } from "@/lib/work";
+
+const listStagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.09 } },
+};
+
+// Rows slide in from the left, echoing the direction they travel on hover.
+const row: Variants = {
+  hidden: { opacity: 0, x: -28 },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 export default function Work() {
   const [active, setActive] = useState<number | null>(null);
@@ -60,10 +76,23 @@ export default function Work() {
           </p>
         </Reveal>
 
-        <ul onMouseLeave={() => setActive(null)}>
+        {/* One trigger for the whole list, not one per row. Per-row triggers
+            fire as each row scrolls in, so the rows just fade independently and
+            the stagger is never visible. */}
+        <motion.ul
+          onMouseLeave={() => setActive(null)}
+          variants={listStagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-120px" }}
+        >
           {WORK.map((w, i) => (
-            <Reveal key={w.slug} delay={i * 0.06}>
-              <li className="border-t border-line last:border-b">
+            <motion.li
+              key={w.slug}
+              data-reveal
+              variants={row}
+              className="border-t border-line last:border-b"
+            >
                 <Link
                   href={`/work/${w.slug}`}
                   data-cursor="hover"
@@ -87,10 +116,9 @@ export default function Work() {
                     {w.year}
                   </span>
                 </Link>
-              </li>
-            </Reveal>
+            </motion.li>
           ))}
-        </ul>
+        </motion.ul>
 
         <Reveal className="mt-10">
           <p className="max-w-lg text-base text-ink-soft">
